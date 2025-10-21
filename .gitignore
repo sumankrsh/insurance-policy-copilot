@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+.venv/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data files (too large for git)
+data/*.parquet
+data/*.csv
+data/vector_index/
+*.pkl
+*.index
+*.faiss
+
+# Model files
+models/
+*.h5
+*.pt
+*.pth
+*.onnx
+*.pb
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+tmp/
+temp/
+
+# Databricks
+*.dbc
+.databricks/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Cache
+__pycache__/
+.cache/
+*.cache
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/cache/
+.streamlit/secrets.toml
+
+# Generated files
+*.pyc
+*.pyo
+
+# Backup files
+*.bak
+*.backup
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Documentation build
+docs/_build/
+docs/site/

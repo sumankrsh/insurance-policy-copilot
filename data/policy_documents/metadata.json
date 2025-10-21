@@ -1,0 +1,59 @@
+{
+  "documents": [
+    {
+      "filename": "term_life_insurance_policy.pdf",
+      "title": "Term Life Insurance Policy",
+      "type": "policy",
+      "category": "life_insurance",
+      "keywords": [
+        "term life",
+        "death benefit",
+        "surrender",
+        "premium",
+        "nomination"
+      ]
+    },
+    {
+      "filename": "ulip_insurance_policy.pdf",
+      "title": "Unit Linked Insurance Plan Policy",
+      "type": "policy",
+      "category": "investment_insurance",
+      "keywords": [
+        "ULIP",
+        "funds",
+        "investment",
+        "market-linked",
+        "switches",
+        "charges"
+      ]
+    },
+    {
+      "filename": "health_insurance_policy.pdf",
+      "title": "Health Insurance Policy",
+      "type": "policy",
+      "category": "health_insurance",
+      "keywords": [
+        "health",
+        "hospitalization",
+        "medical",
+        "claims",
+        "cashless"
+      ]
+    },
+    {
+      "filename": "general_terms_conditions.pdf",
+      "title": "General Terms and Conditions",
+      "type": "terms",
+      "category": "general",
+      "keywords": [
+        "terms",
+        "conditions",
+        "grievance",
+        "premium",
+        "claims"
+      ]
+    }
+  ],
+  "generated_at": "2025-10-22T01:17:50.928545",
+  "total_documents": 4
+}
