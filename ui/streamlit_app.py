@@ -1,415 +1,159 @@
-"""
-Streamlit UI for Insurance Policy Copilot
+"""Streamlit front end for the policy copilot API.
+
+streamlit run ui/streamlit_app.py      # expects the API at API_BASE_URL (default http://localhost:8000)
 """
 
-import streamlit as st
-import requests
-import json
-from datetime import datetime
+from __future__ import annotations
+
+import os
+
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from typing import Dict, Any, List
-import time
+import requests
+import streamlit as st
 
-# Page configuration
-st.set_page_config(
-    page_title="Insurance Policy Copilot",
-    page_icon="🛡️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+API = os.getenv("API_BASE_URL", "http://localhost:8000").rstrip("/")
 
-# API configuration
-API_BASE_URL = "http://localhost:8001"
+st.set_page_config(page_title="Insurance Policy Copilot", layout="wide")
 
-# Custom CSS
-st.markdown("""
-<style>
-    .stApp {
-        background-color: #f7f9fc;
-    }
-    .main-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-    }
-    .main-title {
-        color: white;
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin: 0;
-    }
-    .main-subtitle {
-        color: #e0e7ff;
-        font-size: 1.2rem;
-        margin-top: 0.5rem;
-    }
-    .chat-message {
-        padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-    }
-    .user-message {
-        background-color: #e0e7ff;
-        margin-left: 20%;
-    }
-    .assistant-message {
-        background-color: white;
-        margin-right: 20%;
-        border: 1px solid #e5e7eb;
-    }
-    .citation {
-        background-color: #fef3c7;
-        padding: 0.5rem;
-        border-radius: 5px;
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-    }
-    .decision-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        margin: 1rem 0;
-    }
-    .metric-card {
-        background: white;
-        padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-        text-align: center;
-    }
-    .risk-high {
-        border-left: 4px solid #ef4444;
-    }
-    .risk-medium {
-        border-left: 4px solid #f59e0b;
-    }
-    .risk-low {
-        border-left: 4px solid #10b981;
-    }
-</style>
-""", unsafe_allow_html=True)
 
-# Initialize session state
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-if "session_id" not in st.session_state:
-    st.session_state.session_id = None
-if "customer_id" not in st.session_state:
-    st.session_state.customer_id = None
-if "policy_id" not in st.session_state:
-    st.session_state.policy_id = None
-
-def call_api(endpoint: str, method: str = "GET", data: Dict = None) -> Dict:
-    """Make API call to backend"""
+def call(method: str, path: str, **kwargs):
     try:
-        url = f"{API_BASE_URL}{endpoint}"
-        
-        if method == "GET":
-            response = requests.get(url)
-        elif method == "POST":
-            response = requests.post(url, json=data)
-        elif method == "DELETE":
-            response = requests.delete(url)
-        else:
-            raise ValueError(f"Unsupported method: {method}")
-            
-        response.raise_for_status()
-        return response.json()
-        
-    except requests.exceptions.RequestException as e:
-        st.error(f"API Error: {str(e)}")
+        r = requests.request(method, f"{API}{path}", timeout=90, **kwargs)
+    except requests.RequestException as exc:
+        st.error(f"Can't reach the API at {API}: {exc}")
         return None
-
-def display_decision_card(decision: Dict[str, Any]):
-    """Display decision card with risk assessment"""
-    risk_level = decision.get("risk_level", "unknown")
-    risk_class = f"risk-{risk_level}"
-    
-    st.markdown(f"""
-    <div class="decision-card {risk_class}">
-        <h4>🎯 Surrender Risk Assessment</h4>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem;">
-            <div>
-                <strong>Risk Level:</strong> {risk_level.upper()}<br/>
-                <strong>Probability:</strong> {decision.get('probability', 0):.1%}<br/>
-                <strong>Action:</strong> {decision.get('action', 'N/A')}
-            </div>
-            <div>
-                <strong>Recommendation:</strong><br/>
-                {decision.get('recommendation', 'No recommendation available')}
-            </div>
-        </div>
-        <div style="margin-top: 1rem;">
-            <strong>Top Risk Factors:</strong>
-            <ul style="margin-top: 0.5rem;">
-                {"".join([f"<li>{factor}</li>" for factor in decision.get('top_factors', [])])}
-            </ul>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-def display_citations(citations: List[str]):
-    """Display document citations"""
-    if citations:
-        st.markdown("""
-        <div class="citation">
-            <strong>📚 Sources:</strong> {}
-        </div>
-        """.format(", ".join(citations)), unsafe_allow_html=True)
-
-def main():
-    # Header
-    st.markdown("""
-    <div class="main-header">
-        <h1 class="main-title">🛡️ Insurance Policy Copilot</h1>
-        <p class="main-subtitle">AI-powered assistant for policy inquiries and surrender risk analysis</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Sidebar
-    with st.sidebar:
-        st.header("⚙️ Configuration")
-        
-        # Customer/Policy context
-        st.subheader("Context")
-        customer_id = st.text_input(
-            "Customer ID", 
-            value=st.session_state.customer_id or "",
-            placeholder="e.g., C000001",
-            help="Enter customer ID for personalized assistance"
+    if r.status_code >= 400:
+        detail = (
+            r.json().get("detail", r.text)
+            if r.headers.get("content-type", "").startswith("application/json")
+            else r.text
         )
-        if customer_id:
-            st.session_state.customer_id = customer_id
-            
-        policy_id = st.text_input(
-            "Policy ID",
-            value=st.session_state.policy_id or "",
-            placeholder="e.g., P00000001",
-            help="Enter policy ID for specific policy queries"
-        )
-        if policy_id:
-            st.session_state.policy_id = policy_id
-            
-        # Quick Actions
-        st.subheader("Quick Actions")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("🎯 Check Risk", use_container_width=True):
-                if st.session_state.customer_id:
-                    st.session_state.messages.append({
-                        "role": "user",
-                        "content": f"Check surrender propensity for customer {st.session_state.customer_id}"
-                    })
-                else:
-                    st.warning("Please enter a Customer ID")
-                    
-        with col2:
-            if st.button("📋 Policy Info", use_container_width=True):
-                if st.session_state.policy_id:
-                    st.session_state.messages.append({
-                        "role": "user",
-                        "content": f"Get summary for policy {st.session_state.policy_id}"
-                    })
-                else:
-                    st.warning("Please enter a Policy ID")
-                    
-        if st.button("💰 Calculate Surrender", use_container_width=True):
-            if st.session_state.policy_id:
-                st.session_state.messages.append({
-                    "role": "user",
-                    "content": f"Calculate surrender value for policy {st.session_state.policy_id}"
-                })
-            else:
-                st.warning("Please enter a Policy ID")
-                
-        # Session Management
-        st.subheader("Session")
-        if st.button("🔄 Clear Chat", use_container_width=True):
-            st.session_state.messages = []
-            if st.session_state.session_id:
-                call_api(f"/sessions/{st.session_state.session_id}", method="DELETE")
-            st.session_state.session_id = None
-            st.rerun()
-            
-        # Statistics
-        st.subheader("📊 Statistics")
-        if st.session_state.messages:
-            st.metric("Messages", len(st.session_state.messages))
-            st.metric("Session Duration", f"{len(st.session_state.messages) * 2} min")
-            
-        # Sample Questions
-        st.subheader("💡 Sample Questions")
-        sample_questions = [
-            "What is the surrender charge in year 2?",
-            "What is the lock-in period for ULIP?",
-            "How do I file a claim?",
-            "What are the exclusions in health insurance?",
-            "What is the grace period for premium payment?"
-        ]
-        
-        for question in sample_questions:
-            if st.button(f"❓ {question[:30]}...", key=question, use_container_width=True):
-                st.session_state.messages.append({
-                    "role": "user",
-                    "content": question
-                })
-                st.rerun()
-    
-    # Main chat area
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        st.subheader("💬 Chat")
-        
-        # Display chat messages
-        chat_container = st.container()
-        with chat_container:
-            for message in st.session_state.messages:
-                if message["role"] == "user":
-                    st.markdown(f"""
-                    <div class="chat-message user-message">
-                        <strong>You:</strong><br/>
-                        {message["content"]}
-                    </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.markdown(f"""
-                    <div class="chat-message assistant-message">
-                        <strong>🤖 Assistant:</strong><br/>
-                        {message["content"]}
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Display citations if available
-                    if "citations" in message:
-                        display_citations(message["citations"])
-                        
-                    # Display decision card if available
-                    if "decision" in message and message["decision"]:
-                        display_decision_card(message["decision"])
-        
-        # Chat input
-        with st.form("chat_form", clear_on_submit=True):
-            user_input = st.text_area(
-                "Your message",
-                placeholder="Ask about policies, claims, surrender values, or risk assessment...",
-                height=100
+        st.error(f"{r.status_code}: {detail}")
+        return None
+    return r.json()
+
+
+health = call("GET", "/health")
+st.title("Insurance Policy Copilot")
+st.caption(
+    "Policy Q&A with citations, surrender-risk scoring with human review, and an audit log. All data is synthetic."
+)
+if health:
+    st.caption(
+        f"Answers: `{health['answer_provider']}` · Propensity model: `{health['propensity_model'] or 'not trained'}` "
+        f"· {health['document_chunks']} document sections indexed"
+    )
+
+ask_tab, risk_tab, review_tab, audit_tab = st.tabs(["Ask the documents", "Retention risk", "Review queue", "Audit log"])
+
+with ask_tab:
+    examples = [
+        "What is the surrender charge in year 2 of the term life policy?",
+        "How long is the free-look period?",
+        "What is the waiting period for pre-existing diseases?",
+        "What is the management fee for the Equity Growth Fund?",
+    ]
+    with st.form("ask"):
+        question = st.text_input("Question", placeholder=examples[0])
+        submitted = st.form_submit_button("Ask")
+    st.caption("Try: " + " · ".join(examples[1:]))
+    if submitted and question.strip():
+        result = call("POST", "/ask", json={"question": question})
+        if result:
+            st.markdown(result["answer"])
+            for c in result["citations"]:
+                with st.expander(f"[{c['n']}] {c['document']}, page {c['page']}, {c['section']}"):
+                    st.text(c["quote"] or "")
+            notes = ", ".join(result["guardrails"]) or "none"
+            st.caption(f"Answered by `{result['provider']}` · guardrails: {notes} · trace `{result['trace_id']}`")
+
+with risk_tab:
+    with st.form("risk"):
+        customer_id = st.text_input("Customer ID", value="C000001", help="Synthetic IDs run from C000001 to C020000")
+        scored = st.form_submit_button("Score")
+    if scored:
+        result = call("POST", f"/customers/{customer_id.strip()}/propensity")
+        if result and not result["policies"]:
+            st.info("This customer has no active policies.")
+        elif result:
+            d = result["decision"]
+            cols = st.columns(3)
+            cols[0].metric("Highest 90-day surrender probability", f"{d['probability']:.0%}")
+            cols[1].metric("Risk tier", d["risk_tier"])
+            cols[2].caption("Recommended action")
+            cols[2].markdown(f"**{d['recommended_action'].replace('_', ' ')}**")
+            if d["status"] == "pending_human_review":
+                st.warning(f"Held for human review before any outreach (review `{d['review_id']}`).")
+            rows = [
+                {
+                    "policy": p["policy_id"],
+                    "type": p["policy_type"],
+                    "probability": f"{p['probability']:.0%}",
+                    "tier": p["risk_tier"],
+                    "top factors": "; ".join(
+                        f"{f['description']} = {f['value']:g} (+{f['effect'] * 100:.0f} pts)" for f in p["top_factors"]
+                    ),
+                }
+                for p in result["policies"]
+            ]
+            st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+            st.caption(
+                f"Model `{result['model_version']}` · factor effect = how much the score drops when that "
+                f"feature is set to its typical value · trace `{result['trace_id']}`"
             )
-            
-            col1, col2, col3 = st.columns([1, 1, 4])
-            with col1:
-                submit = st.form_submit_button("Send 📤", use_container_width=True)
-            with col2:
-                temperature = st.slider("Temperature", 0.0, 1.0, 0.3, 0.1)
-                
-        if submit and user_input:
-            # Add user message
-            st.session_state.messages.append({
-                "role": "user",
-                "content": user_input
-            })
-            
-            # Prepare API request
-            request_data = {
-                "messages": [
-                    {"role": msg["role"], "content": msg["content"]}
-                    for msg in st.session_state.messages
-                ],
-                "temperature": temperature
-            }
-            
-            if st.session_state.customer_id:
-                request_data["customer_id"] = st.session_state.customer_id
-            if st.session_state.policy_id:
-                request_data["policy_id"] = st.session_state.policy_id
-            if st.session_state.session_id:
-                request_data["session_id"] = st.session_state.session_id
-                
-            # Show spinner
-            with st.spinner("Thinking..."):
-                # Call API
-                response = call_api("/chat", method="POST", data=request_data)
-                
-                if response:
-                    # Update session ID
-                    st.session_state.session_id = response.get("session_id")
-                    
-                    # Add assistant message
-                    assistant_message = {
-                        "role": "assistant",
-                        "content": response.get("response", ""),
-                        "citations": response.get("citations", []),
-                        "decision": response.get("decision"),
-                        "tools_used": response.get("tools_used", [])
+
+with review_tab:
+    reviewer = st.text_input("Your name (recorded in the audit log)", value="")
+    pending = call("GET", "/reviews", params={"status": "pending"}) or []
+    if not pending:
+        st.info("No recommendations waiting for review. Score a high-risk customer in the Retention tab to add one.")
+    for r in pending:
+        with st.container(border=True):
+            st.markdown(
+                f"**{r['customer_id']}** · policy {r['policy_id']} · {r['probability']:.0%} "
+                f"({r['risk_tier']}) · recommended: {r['recommended_action'].replace('_', ' ')}"
+            )
+            st.caption("; ".join(f"{f['description']} = {f['value']:g}" for f in r["top_factors"]))
+            note = st.text_input("Note", key=f"note-{r['review_id']}")
+            left, right, _ = st.columns([1, 1, 4])
+            for col, approve, label in ((left, True, "Approve"), (right, False, "Reject")):
+                if col.button(label, key=f"{label}-{r['review_id']}", disabled=not reviewer.strip()):
+                    body = {"approve": approve, "reviewer": reviewer.strip(), "note": note}
+                    if call("POST", f"/reviews/{r['review_id']}", json=body):
+                        st.rerun()
+    decided = [r for r in (call("GET", "/reviews") or []) if r["status"] != "pending"]
+    if decided:
+        st.subheader("Decided")
+        st.dataframe(
+            pd.DataFrame(decided)[
+                ["review_id", "customer_id", "policy_id", "probability", "status", "reviewer", "note"]
+            ],
+            hide_index=True,
+            width="stretch",
+        )
+
+with audit_tab:
+    if st.button("Verify hash chain"):
+        v = call("GET", "/audit/verify")
+        if v and v["ok"]:
+            st.success(f"Chain intact: {v['records']} records.")
+        elif v:
+            st.error(f"Chain broken at record {v['first_bad_id']}.")
+    records = call("GET", "/audit", params={"limit": 50}) or []
+    if records:
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "id": r["id"],
+                        "time": r["ts"],
+                        "event": r["event"],
+                        "trace": r["trace_id"][:8],
+                        "payload": r["payload"],
                     }
-                    st.session_state.messages.append(assistant_message)
-                    
-            st.rerun()
-    
-    with col2:
-        st.subheader("📈 Insights")
-        
-        # Risk Distribution (Mock Data)
-        risk_data = pd.DataFrame({
-            'Risk Level': ['Low', 'Medium', 'High'],
-            'Count': [65, 25, 10],
-            'Color': ['#10b981', '#f59e0b', '#ef4444']
-        })
-        
-        fig = go.Figure(data=[
-            go.Pie(
-                labels=risk_data['Risk Level'],
-                values=risk_data['Count'],
-                marker_colors=risk_data['Color'],
-                hole=0.4
-            )
-        ])
-        
-        fig.update_layout(
-            title="Portfolio Risk Distribution",
-            showlegend=True,
-            height=250,
-            margin=dict(l=0, r=0, t=30, b=0)
+                    for r in records
+                ]
+            ),
+            hide_index=True,
+            width="stretch",
         )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Key Metrics
-        st.markdown("### 📊 Key Metrics")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("""
-            <div class="metric-card">
-                <h4>78%</h4>
-                <p>Retention Rate</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with col2:
-            st.markdown("""
-            <div class="metric-card">
-                <h4>2.5%</h4>
-                <p>Surrender Rate</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        # Recent Activity
-        st.markdown("### 🕐 Recent Activity")
-        activities = [
-            "Risk assessment completed",
-            "Policy summary generated",
-            "Surrender value calculated",
-            "Documents retrieved"
-        ]
-        
-        for activity in activities[:3]:
-            st.info(f"✓ {activity}", icon="ℹ️")
-
-if __name__ == "__main__":
-    main()
