@@ -1,0 +1,1757 @@
+{
+  "summary": {
+    "provider": "extractive",
+    "questions": 40,
+    "answerable": 32,
+    "unanswerable": 8,
+    "retrieval_hit_at_1": 1.0,
+    "retrieval_hit_at_3": 1.0,
+    "answer_accuracy": 0.938,
+    "cites_expected_source": 1.0,
+    "false_not_found": 0.0,
+    "not_found_accuracy": 0.5,
+    "llm_fallbacks": 0,
+    "median_latency_ms": 5.0,
+    "input_tokens": 0,
+    "output_tokens": 0
+  },
+  "rows": [
+    {
+      "id": "q01",
+      "question": "What is the surrender charge in year 2 of the term life policy?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Surrender Charges: If you surrender your policy before the completion of the lock-in period, surrender charges will apply as follows: Year 2: 8% of total premiums paid [1]\n- 3.5 Surrender Charge: Nil after 5 years [2]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Surrender value and charges",
+          "quote": "Surrender Charges: If you surrender your policy before the completion of the lock-in period, surrender charges will apply as follows: Year 2: 8% of total premiums paid"
+        },
+        {
+          "n": 2,
+          "chunk_id": "ulip_insurance_policy:p1:section-3-charges-structure",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Charges structure",
+          "quote": "3.5 Surrender Charge: Nil after 5 years"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.406
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.3211
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.2208
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.1994
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.9,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q02",
+      "question": "How long is the lock-in period for the ULIP?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Lock-in Period: The policy has a lock-in period of 5 years. Surrender during this period will result in the charges mentioned above. [2]\n- 4.1 Lock-in Period: 5 years from policy commencement [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 4: Lock-in period and liquidity",
+          "quote": "4.1 Lock-in Period: 5 years from policy commencement"
+        },
+        {
+          "n": 2,
+          "chunk_id": "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Surrender value and charges",
+          "quote": "Lock-in Period: The policy has a lock-in period of 5 years. Surrender during this period will result in the charges mentioned above."
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.2238
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.2221
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.0902
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.0892
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q03",
+      "question": "What is the grace period for premium payment?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Grace period of 30 days for all payment modes [1]\n- Premium Payment: Premiums must be paid on or before the due date. A grace period of 30 days is provided. [3]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p1:premium-payment-conditions",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 1,
+          "section": "Premium payment conditions",
+          "quote": "Grace period of 30 days for all payment modes"
+        },
+        {
+          "n": 3,
+          "chunk_id": "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 3,
+          "section": "Section 6: Terms and conditions",
+          "quote": "Premium Payment: Premiums must be paid on or before the due date. A grace period of 30 days is provided."
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.4849
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.3267
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.2873
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.1212
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.8,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q04",
+      "question": "Within how many days must the nominee notify the company after the insured's death?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Notification: The nominee must notify the Company within 30 days of the insured's death. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p2:section-5-claims-process",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 5: Claims process",
+          "quote": "Notification: The nominee must notify the Company within 30 days of the insured's death."
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.3968
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.1949
+        ],
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.1451
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.1164
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q05",
+      "question": "Which documents are required for a death claim?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Required Documents: Death certificate [1]\n- Required Documents: Claim form duly filled [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p2:section-5-claims-process",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 5: Claims process",
+          "quote": "Required Documents: Death certificate"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.3804
+        ],
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.3147
+        ],
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.1406
+        ],
+        [
+          "term_life_insurance_policy:p2:section-4-exclusions",
+          0.09
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q06",
+      "question": "How soon is a claim settled once all documents are received?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Settlement Timeline: Claims will be settled within 30 days of receipt of all required documents. [2]",
+      "citations": [
+        {
+          "n": 2,
+          "chunk_id": "term_life_insurance_policy:p2:section-5-claims-process",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 5: Claims process",
+          "quote": "Settlement Timeline: Claims will be settled within 30 days of receipt of all required documents."
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.2981
+        ],
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.2873
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.1031
+        ],
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.0857
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.5,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q07",
+      "question": "Is death by suicide covered under the term life policy?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- The Company shall not be liable to pay the death benefit if death occurs due to: Suicide within 12 months from policy commencement [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p2:section-4-exclusions",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 4: Exclusions",
+          "quote": "The Company shall not be liable to pay the death benefit if death occurs due to: Suicide within 12 months from policy commencement"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p2:section-4-exclusions",
+          0.2503
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.2304
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.171
+        ],
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.1618
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.9,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q08",
+      "question": "When do policy loans become available on the term life policy?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Loans: Policy loans are available after 3 years at prevailing interest rates. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 3,
+          "section": "Section 6: Terms and conditions",
+          "quote": "Loans: Policy loans are available after 3 years at prevailing interest rates."
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.2704
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.2273
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1537
+        ],
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.132
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q09",
+      "question": "How long is the free-look period?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Free-Look Period: The policyholder has 15 days from policy receipt to review and return if not satisfied. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 3,
+          "section": "Section 6: Terms and conditions",
+          "quote": "Free-Look Period: The policyholder has 15 days from policy receipt to review and return if not satisfied."
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.216
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.0911
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.0904
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.0846
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.5,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q10",
+      "question": "How long after lapse can a policy be revived?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Lapsed policies can be revived within 2 years [2]\n- Policy Lapse: If premiums are not paid within the grace period, the policy will lapse. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 3,
+          "section": "Section 6: Terms and conditions",
+          "quote": "Policy Lapse: If premiums are not paid within the grace period, the policy will lapse."
+        },
+        {
+          "n": 2,
+          "chunk_id": "general_terms_conditions:p1:premium-payment-conditions",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 1,
+          "section": "Premium payment conditions",
+          "quote": "Lapsed policies can be revived within 2 years"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.255
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.2083
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1567
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.0587
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q11",
+      "question": "What is the management fee for the Equity Growth Fund?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Fund Name: Equity Growth Fund; Risk Level: High; Asset Allocation: 80-100% Equity; Management Fee: 1.35% p.a. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p1:section-2-fund-options",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 2: Fund options",
+          "quote": "Fund Name: Equity Growth Fund; Risk Level: High; Asset Allocation: 80-100% Equity; Management Fee: 1.35% p.a."
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-2-fund-options",
+          0.4233
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.1143
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.1075
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.0627
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.3,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q12",
+      "question": "How many free fund switches are allowed each year in the ULIP?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- 3.7 Fund Switch Charge: Free for first 4 switches, INR 100 thereafter [2]\n- This Unit Linked Insurance Plan combines investment and insurance, offering: Fund switching options (4 free switches per year) [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p1:section-1-ulip-features",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 1: ULIP features",
+          "quote": "This Unit Linked Insurance Plan combines investment and insurance, offering: Fund switching options (4 free switches per year)"
+        },
+        {
+          "n": 2,
+          "chunk_id": "ulip_insurance_policy:p1:section-3-charges-structure",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Charges structure",
+          "quote": "3.7 Fund Switch Charge: Free for first 4 switches, INR 100 thereafter"
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.2755
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.2221
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.1992
+        ],
+        [
+          "ulip_insurance_policy:p1:section-2-fund-options",
+          0.1031
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.2,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q13",
+      "question": "What does a fund switch cost after the free switches are used?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- 3.7 Fund Switch Charge: Free for first 4 switches, INR 100 thereafter [2]",
+      "citations": [
+        {
+          "n": 2,
+          "chunk_id": "ulip_insurance_policy:p1:section-3-charges-structure",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Charges structure",
+          "quote": "3.7 Fund Switch Charge: Free for first 4 switches, INR 100 thereafter"
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.2398
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.2387
+        ],
+        [
+          "ulip_insurance_policy:p1:section-2-fund-options",
+          0.0834
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.0585
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.2,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q14",
+      "question": "What is the maximum partial withdrawal from the ULIP per year?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- 4.2 Partial Withdrawals: Allowed after 5 years, maximum 20% of fund value per year [2]\n- 3.6 Partial Withdrawal Charge: Nil (after 5 years) [3]",
+      "citations": [
+        {
+          "n": 2,
+          "chunk_id": "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 4: Lock-in period and liquidity",
+          "quote": "4.2 Partial Withdrawals: Allowed after 5 years, maximum 20% of fund value per year"
+        },
+        {
+          "n": 3,
+          "chunk_id": "ulip_insurance_policy:p1:section-3-charges-structure",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Charges structure",
+          "quote": "3.6 Partial Withdrawal Charge: Nil (after 5 years)"
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.2423
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.2141
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.1688
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.0472
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q15",
+      "question": "What is the premium allocation charge in the first year of the ULIP?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Premium Allocation Charge: Year 1: 8% of annual premium [1]\n- Premium Allocation Charge: Year 3: 4% of annual premium [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p1:section-3-charges-structure",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Charges structure",
+          "quote": "Premium Allocation Charge: Year 1: 8% of annual premium"
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.349
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.1756
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.1336
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.1204
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.7,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q16",
+      "question": "What happens to a ULIP if premiums are discontinued?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- 4.4 Premium Discontinuance: Policy moves to discontinuance fund earning 4% p.a. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 4: Lock-in period and liquidity",
+          "quote": "4.4 Premium Discontinuance: Policy moves to discontinuance fund earning 4% p.a."
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.1509
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.1208
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.1032
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.103
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.5,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q17",
+      "question": "What is the monthly policy administration charge on the ULIP?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- 3.3 Policy Administration Charge: INR 50 per month [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p1:section-3-charges-structure",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Charges structure",
+          "quote": "3.3 Policy Administration Charge: INR 50 per month"
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.2747
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1045
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.0814
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.0674
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.4,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q18",
+      "question": "What is the waiting period for pre-existing diseases under the health policy?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Pre-existing diseases: 3 years [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-2-waiting-periods",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 2: Waiting periods",
+          "quote": "Pre-existing diseases: 3 years"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-2-waiting-periods",
+          0.5923
+        ],
+        [
+          "term_life_insurance_policy:p2:section-4-exclusions",
+          0.1309
+        ],
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.0935
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.0821
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q19",
+      "question": "Does the health policy cover cosmetic treatment?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Treatment/expenses not covered: Cosmetic/aesthetic treatments [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-3-exclusions",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Exclusions",
+          "quote": "Treatment/expenses not covered: Cosmetic/aesthetic treatments"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-3-exclusions",
+          0.3928
+        ],
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.0936
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.0931
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.0843
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.9,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q20",
+      "question": "How many days of post-hospitalisation expenses are covered?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Pre-hospitalization (60 days) and Post-hospitalization (90 days) [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-1-coverage-benefits",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 1: Coverage benefits",
+          "quote": "Pre-hospitalization (60 days) and Post-hospitalization (90 days)"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.3629
+        ],
+        [
+          "health_insurance_policy:p1:section-3-exclusions",
+          0.1564
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.0673
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.045
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q21",
+      "question": "What is the no claim bonus on the health policy?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- No Claim Bonus: 10% increase in sum insured for claim-free year [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-1-coverage-benefits",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 1: Coverage benefits",
+          "quote": "No Claim Bonus: 10% increase in sum insured for claim-free year"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.2806
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.1459
+        ],
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.1105
+        ],
+        [
+          "health_insurance_policy:p1:section-2-waiting-periods",
+          0.0854
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.4,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q22",
+      "question": "What is the limit on ambulance charges per hospitalization?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Ambulance charges (up to INR 5,000 per hospitalization) [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-1-coverage-benefits",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 1: Coverage benefits",
+          "quote": "Ambulance charges (up to INR 5,000 per hospitalization)"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.4475
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.1035
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.0898
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.0549
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.5,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q23",
+      "question": "What is the waiting period for maternity benefits?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Maternity benefits: 2 years [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-2-waiting-periods",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 2: Waiting periods",
+          "quote": "Maternity benefits: 2 years"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-2-waiting-periods",
+          0.4773
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.0845
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.0745
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.0728
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.6,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q24",
+      "question": "Which regulations govern these policies?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Policy governed by Insurance Act and IRDAI regulations [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p2:regulatory-compliance",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 2,
+          "section": "Regulatory compliance",
+          "quote": "Policy governed by Insurance Act and IRDAI regulations"
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p2:regulatory-compliance",
+          0.2999
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.1058
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.081
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.0345
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.6,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q25",
+      "question": "Under which tax sections are tax benefits available?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Tax benefits under Section 80C and 80D [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p2:regulatory-compliance",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 2,
+          "section": "Regulatory compliance",
+          "quote": "Tax benefits under Section 80C and 80D"
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p2:regulatory-compliance",
+          0.2208
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.0951
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.0943
+        ],
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.0897
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.6,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q26",
+      "question": "What is the final level of the grievance redressal process?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Level 2: Grievance Officer (15 days) [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p2:grievance-redressal",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 2,
+          "section": "Grievance redressal",
+          "quote": "Level 2: Grievance Officer (15 days)"
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p2:grievance-redressal",
+          0.454
+        ],
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.0761
+        ],
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.0723
+        ],
+        [
+          "ulip_insurance_policy:p1:section-2-fund-options",
+          0.0522
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.4,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": false,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q27",
+      "question": "Within how many days should an address change be updated?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Address/contact updates within 15 days [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p1:policy-servicing",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 1,
+          "section": "Policy servicing",
+          "quote": "Address/contact updates within 15 days"
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.2895
+        ],
+        [
+          "general_terms_conditions:p2:grievance-redressal",
+          0.0735
+        ],
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.0693
+        ],
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.0476
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.5,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q28",
+      "question": "What does Sum Assured mean?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- \"Sum Assured\": Amount payable on claim [1]\n- Sum Assured: As specified in Policy Schedule [2]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p1:definitions",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 1,
+          "section": "Definitions",
+          "quote": "\"Sum Assured\": Amount payable on claim"
+        },
+        {
+          "n": 2,
+          "chunk_id": "term_life_insurance_policy:p1:section-2-coverage-details",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 2: Coverage details",
+          "quote": "Sum Assured: As specified in Policy Schedule"
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:definitions",
+          0.2149
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1791
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.1348
+        ],
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.0661
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.8,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q29",
+      "question": "Which ULIP fund has the lowest risk level?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Fund Name: Debt Fund; Risk Level: Low; Asset Allocation: 100% Debt Securities; Management Fee: 1.00% p.a. [1]\n- Fund Name: Liquid Fund; Risk Level: Very Low; Asset Allocation: Money Market Instruments; Management Fee: 0.75% p.a. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "ulip_insurance_policy:p1:section-2-fund-options",
+          "document": "Unit Linked Insurance Plan Policy",
+          "source_file": "ulip_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 2: Fund options",
+          "quote": "Fund Name: Debt Fund; Risk Level: Low; Asset Allocation: 100% Debt Securities; Management Fee: 1.00% p.a."
+        }
+      ],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-2-fund-options",
+          0.2472
+        ],
+        [
+          "general_terms_conditions:p2:grievance-redressal",
+          0.1423
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.1214
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.0766
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.3,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q30",
+      "question": "How is the surrender value calculated for the term life policy?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Surrender Value Calculation: Surrender Value = Total Premiums Paid - Surrender Charges - Outstanding Loans (if any) [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Surrender value and charges",
+          "quote": "Surrender Value Calculation: Surrender Value = Total Premiums Paid - Surrender Charges - Outstanding Loans (if any)"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.4033
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.2089
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.1921
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1342
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.2,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q31",
+      "question": "If I change my mind right after buying a policy, how long do I have to return it?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- Free-Look Period: The policyholder has 15 days from policy receipt to review and return if not satisfied. [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 3,
+          "section": "Section 6: Terms and conditions",
+          "quote": "Free-Look Period: The policyholder has 15 days from policy receipt to review and return if not satisfied."
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.1451
+        ],
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.1212
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.0555
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.0455
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.8,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": true,
+      "cites_expected_source": true
+    },
+    {
+      "id": "q32",
+      "question": "Does the term life policy pay out if the insured dies in a war?",
+      "expect": "answer",
+      "found": true,
+      "answer": "From the policy documents:\n- This Term Life Insurance Policy (\"Policy\") is a contract between the Policyholder and [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p1:section-1-policy-details",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 1: Policy details",
+          "quote": "This Term Life Insurance Policy (\"Policy\") is a contract between the Policyholder and"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.2486
+        ],
+        [
+          "term_life_insurance_policy:p2:section-4-exclusions",
+          0.2145
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1901
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.1417
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.0,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "correct": false,
+      "cites_expected_source": true
+    },
+    {
+      "id": "u01",
+      "question": "What is the capital of France?",
+      "expect": "not_found",
+      "found": false,
+      "answer": "I couldn't find this in the policy documents.",
+      "citations": [],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.1203
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.036
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.0334
+        ],
+        [
+          "health_insurance_policy:p1:section-3-exclusions",
+          0.0305
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.1,
+      "correct": true
+    },
+    {
+      "id": "u02",
+      "question": "What is the minimum entry age for the term life policy?",
+      "expect": "not_found",
+      "found": true,
+      "answer": "From the policy documents:\n- This Term Life Insurance Policy (\"Policy\") is a contract between the Policyholder and [1]\n- Coverage Type: Term Life Insurance [2]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "term_life_insurance_policy:p1:section-1-policy-details",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 1: Policy details",
+          "quote": "This Term Life Insurance Policy (\"Policy\") is a contract between the Policyholder and"
+        },
+        {
+          "n": 2,
+          "chunk_id": "term_life_insurance_policy:p1:section-2-coverage-details",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 2: Coverage details",
+          "quote": "Coverage Type: Term Life Insurance"
+        }
+      ],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.2819
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1985
+        ],
+        [
+          "term_life_insurance_policy:p2:section-4-exclusions",
+          0.1003
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.0975
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.8,
+      "correct": false
+    },
+    {
+      "id": "u03",
+      "question": "What is the company's claim settlement ratio?",
+      "expect": "not_found",
+      "found": true,
+      "answer": "From the policy documents:\n- Settlement within 30 days of document receipt [1]\n- Settlement Timeline: Claims will be settled within 30 days of receipt of all required documents. [2]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p1:claim-settlement-process",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 1,
+          "section": "Claim settlement process",
+          "quote": "Settlement within 30 days of document receipt"
+        },
+        {
+          "n": 2,
+          "chunk_id": "term_life_insurance_policy:p2:section-5-claims-process",
+          "document": "Term Life Insurance Policy",
+          "source_file": "term_life_insurance_policy.pdf",
+          "page": 2,
+          "section": "Section 5: Claims process",
+          "quote": "Settlement Timeline: Claims will be settled within 30 days of receipt of all required documents."
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:claim-settlement-process",
+          0.3808
+        ],
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.2311
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.1355
+        ],
+        [
+          "term_life_insurance_policy:p1:section-1-policy-details",
+          0.0978
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "correct": false
+    },
+    {
+      "id": "u04",
+      "question": "Can I pay my premium with cryptocurrency?",
+      "expect": "not_found",
+      "found": false,
+      "answer": "I couldn't find this in the policy documents.",
+      "citations": [],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.1386
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.129
+        ],
+        [
+          "term_life_insurance_policy:p1:section-3-surrender-value-and-charges",
+          0.1177
+        ],
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.1069
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.4,
+      "correct": true
+    },
+    {
+      "id": "u05",
+      "question": "Does the ULIP guarantee a minimum return?",
+      "expect": "not_found",
+      "found": false,
+      "answer": "I couldn't find this in the policy documents.",
+      "citations": [],
+      "top_chunks": [
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.0914
+        ],
+        [
+          "term_life_insurance_policy:p3:section-6-terms-and-conditions",
+          0.0874
+        ],
+        [
+          "ulip_insurance_policy:p2:section-4-lock-in-period-and-liquidity",
+          0.025
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.0157
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 0.6,
+      "correct": true
+    },
+    {
+      "id": "u06",
+      "question": "How do I reset my online account password?",
+      "expect": "not_found",
+      "found": true,
+      "answer": "From the policy documents:\n- Policy documents available online [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "general_terms_conditions:p1:policy-servicing",
+          "document": "General Terms and Conditions",
+          "source_file": "general_terms_conditions.pdf",
+          "page": 1,
+          "section": "Policy servicing",
+          "quote": "Policy documents available online"
+        }
+      ],
+      "top_chunks": [
+        [
+          "general_terms_conditions:p1:policy-servicing",
+          0.1593
+        ],
+        [
+          "term_life_insurance_policy:p2:section-5-claims-process",
+          0.0344
+        ],
+        [
+          "ulip_insurance_policy:p1:section-2-fund-options",
+          0.0214
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.016
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.8,
+      "correct": false
+    },
+    {
+      "id": "u07",
+      "question": "What premium would a 30-year-old non-smoker pay for term cover?",
+      "expect": "not_found",
+      "found": false,
+      "answer": "I couldn't find this in the policy documents.",
+      "citations": [],
+      "top_chunks": [
+        [
+          "term_life_insurance_policy:p1:section-2-coverage-details",
+          0.22
+        ],
+        [
+          "ulip_insurance_policy:p1:section-3-charges-structure",
+          0.1448
+        ],
+        [
+          "general_terms_conditions:p1:premium-payment-conditions",
+          0.1433
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.1397
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 4.7,
+      "correct": true
+    },
+    {
+      "id": "u08",
+      "question": "Does the health policy cover treatment abroad?",
+      "expect": "not_found",
+      "found": true,
+      "answer": "From the policy documents:\n- Treatment/expenses not covered: Treatment arising from substance abuse [1]\n- Treatment/expenses not covered: Dental treatment (unless accident-related) [1]",
+      "citations": [
+        {
+          "n": 1,
+          "chunk_id": "health_insurance_policy:p1:section-3-exclusions",
+          "document": "Health Insurance Policy",
+          "source_file": "health_insurance_policy.pdf",
+          "page": 1,
+          "section": "Section 3: Exclusions",
+          "quote": "Treatment/expenses not covered: Treatment arising from substance abuse"
+        }
+      ],
+      "top_chunks": [
+        [
+          "health_insurance_policy:p1:section-3-exclusions",
+          0.354
+        ],
+        [
+          "health_insurance_policy:p1:section-1-coverage-benefits",
+          0.1139
+        ],
+        [
+          "general_terms_conditions:p1:definitions",
+          0.1129
+        ],
+        [
+          "ulip_insurance_policy:p1:section-1-ulip-features",
+          0.1018
+        ]
+      ],
+      "fallback_reason": null,
+      "usage": {},
+      "latency_ms": 5.1,
+      "correct": false
+    }
+  ]
+}

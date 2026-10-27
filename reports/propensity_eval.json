@@ -1,0 +1,120 @@
+{
+  "model_version": "gradient_boosting-seed42-n20000",
+  "chosen_model": "gradient_boosting",
+  "data": {
+    "synthetic_customers": 20000,
+    "seed": 42,
+    "as_of": "2026-01-01",
+    "active_policies": 34298,
+    "train_policies": 20673,
+    "validation_policies": 6853,
+    "test_policies": 6772,
+    "test_base_rate": 0.26
+  },
+  "validation_roc_auc": {
+    "logistic_regression": 0.6975,
+    "gradient_boosting": 0.7273
+  },
+  "test_metrics": {
+    "logistic_regression": {
+      "roc_auc": 0.7043,
+      "pr_auc": 0.4349,
+      "brier": 0.1746,
+      "log_loss": 0.5258,
+      "lift_top_decile": 2.01
+    },
+    "gradient_boosting": {
+      "roc_auc": 0.7317,
+      "pr_auc": 0.4724,
+      "brier": 0.1678,
+      "log_loss": 0.5058,
+      "lift_top_decile": 2.09
+    },
+    "generator_probability (ceiling)": {
+      "roc_auc": 0.7464,
+      "pr_auc": 0.4943,
+      "brier": 0.1642,
+      "log_loss": 0.4958,
+      "lift_top_decile": 2.26
+    }
+  },
+  "risk_tiers_on_test": [
+    {
+      "tier": "high",
+      "policies": 345,
+      "share": 0.0509,
+      "mean_predicted": 0.5496,
+      "observed_surrender_rate": 0.629,
+      "share_of_all_surrenders": 0.1232
+    },
+    {
+      "tier": "medium",
+      "policies": 3420,
+      "share": 0.505,
+      "mean_predicted": 0.3382,
+      "observed_surrender_rate": 0.3509,
+      "share_of_all_surrenders": 0.6814
+    },
+    {
+      "tier": "low",
+      "policies": 3007,
+      "share": 0.444,
+      "mean_predicted": 0.1295,
+      "observed_surrender_rate": 0.1144,
+      "share_of_all_surrenders": 0.1953
+    }
+  ],
+  "calibration_on_test": [
+    {
+      "bin": "0.0-0.1",
+      "policies": 1020,
+      "mean_predicted": 0.0787,
+      "observed_rate": 0.0539
+    },
+    {
+      "bin": "0.1-0.2",
+      "policies": 1560,
+      "mean_predicted": 0.1347,
+      "observed_rate": 0.1186
+    },
+    {
+      "bin": "0.2-0.3",
+      "policies": 1713,
+      "mean_predicted": 0.2607,
+      "observed_rate": 0.2668
+    },
+    {
+      "bin": "0.3-0.4",
+      "policies": 1451,
+      "mean_predicted": 0.3441,
+      "observed_rate": 0.3694
+    },
+    {
+      "bin": "0.4-0.5",
+      "policies": 683,
+      "mean_predicted": 0.4536,
+      "observed_rate": 0.4553
+    },
+    {
+      "bin": "0.5-0.6",
+      "policies": 308,
+      "mean_predicted": 0.5417,
+      "observed_rate": 0.6136
+    },
+    {
+      "bin": "0.6-0.7",
+      "policies": 37,
+      "mean_predicted": 0.615,
+      "observed_rate": 0.7568
+    }
+  ],
+  "thresholds": {
+    "high": 0.5,
+    "medium": 0.25
+  },
+  "library_versions": {
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0"
+  }
+}

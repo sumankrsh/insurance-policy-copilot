@@ -1,0 +1,4 @@
+# Optional MLflow tracking (python -m ml.train_propensity --mlflow).
+# Point MLFLOW_TRACKING_URI at "databricks" to log to a Databricks workspace.
+mlflow>=3.0
+databricks-sdk>=0.30

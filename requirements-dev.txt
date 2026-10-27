@@ -1,0 +1,5 @@
+-r requirements.txt
+pytest>=8
+httpx>=0.27     # FastAPI's TestClient
+ruff==0.17.3   # pinned so local and CI formatting agree
+reportlab>=4    # only needed to regenerate the sample PDFs

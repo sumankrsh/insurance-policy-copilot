@@ -1,0 +1,40 @@
+{"id": "q01", "question": "What is the surrender charge in year 2 of the term life policy?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["8%"]]}
+{"id": "q02", "question": "How long is the lock-in period for the ULIP?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["5 years", "five years"]]}
+{"id": "q03", "question": "What is the grace period for premium payment?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf", "general_terms_conditions.pdf"], "must_include": [["30 days"]]}
+{"id": "q04", "question": "Within how many days must the nominee notify the company after the insured's death?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["30 days"]]}
+{"id": "q05", "question": "Which documents are required for a death claim?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["death certificate"]]}
+{"id": "q06", "question": "How soon is a claim settled once all documents are received?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf", "general_terms_conditions.pdf"], "must_include": [["30 days"]]}
+{"id": "q07", "question": "Is death by suicide covered under the term life policy?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["12 months"]]}
+{"id": "q08", "question": "When do policy loans become available on the term life policy?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["3 years", "three years"]]}
+{"id": "q09", "question": "How long is the free-look period?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["15 days"]]}
+{"id": "q10", "question": "How long after lapse can a policy be revived?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf", "general_terms_conditions.pdf"], "must_include": [["2 years", "two years"]]}
+{"id": "q11", "question": "What is the management fee for the Equity Growth Fund?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["1.35%"]]}
+{"id": "q12", "question": "How many free fund switches are allowed each year in the ULIP?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["4", "four"]]}
+{"id": "q13", "question": "What does a fund switch cost after the free switches are used?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["100"]]}
+{"id": "q14", "question": "What is the maximum partial withdrawal from the ULIP per year?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["20%"]]}
+{"id": "q15", "question": "What is the premium allocation charge in the first year of the ULIP?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["8%"]]}
+{"id": "q16", "question": "What happens to a ULIP if premiums are discontinued?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["discontinuance fund"]]}
+{"id": "q17", "question": "What is the monthly policy administration charge on the ULIP?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["50"]]}
+{"id": "q18", "question": "What is the waiting period for pre-existing diseases under the health policy?", "expect": "answer", "sources": ["health_insurance_policy.pdf"], "must_include": [["3 years", "three years"]]}
+{"id": "q19", "question": "Does the health policy cover cosmetic treatment?", "expect": "answer", "sources": ["health_insurance_policy.pdf"], "must_include": [["not covered", "exclu", "no,", "does not", "doesn't"]]}
+{"id": "q20", "question": "How many days of post-hospitalisation expenses are covered?", "expect": "answer", "sources": ["health_insurance_policy.pdf"], "must_include": [["90 days"]]}
+{"id": "q21", "question": "What is the no claim bonus on the health policy?", "expect": "answer", "sources": ["health_insurance_policy.pdf"], "must_include": [["10%"]]}
+{"id": "q22", "question": "What is the limit on ambulance charges per hospitalization?", "expect": "answer", "sources": ["health_insurance_policy.pdf"], "must_include": [["5,000"]]}
+{"id": "q23", "question": "What is the waiting period for maternity benefits?", "expect": "answer", "sources": ["health_insurance_policy.pdf"], "must_include": [["2 years", "two years"]]}
+{"id": "q24", "question": "Which regulations govern these policies?", "expect": "answer", "sources": ["general_terms_conditions.pdf"], "must_include": [["IRDAI"]]}
+{"id": "q25", "question": "Under which tax sections are tax benefits available?", "expect": "answer", "sources": ["general_terms_conditions.pdf"], "must_include": [["80C"], ["80D"]]}
+{"id": "q26", "question": "What is the final level of the grievance redressal process?", "expect": "answer", "sources": ["general_terms_conditions.pdf"], "must_include": [["Ombudsman"]]}
+{"id": "q27", "question": "Within how many days should an address change be updated?", "expect": "answer", "sources": ["general_terms_conditions.pdf"], "must_include": [["15 days"]]}
+{"id": "q28", "question": "What does Sum Assured mean?", "expect": "answer", "sources": ["general_terms_conditions.pdf"], "must_include": [["payable on claim", "paid on a claim", "payable on a claim"]]}
+{"id": "q29", "question": "Which ULIP fund has the lowest risk level?", "expect": "answer", "sources": ["ulip_insurance_policy.pdf"], "must_include": [["Liquid"]]}
+{"id": "q30", "question": "How is the surrender value calculated for the term life policy?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["premiums paid"]]}
+{"id": "q31", "question": "If I change my mind right after buying a policy, how long do I have to return it?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["15 days"]]}
+{"id": "q32", "question": "Does the term life policy pay out if the insured dies in a war?", "expect": "answer", "sources": ["term_life_insurance_policy.pdf"], "must_include": [["war"]]}
+{"id": "u01", "question": "What is the capital of France?", "expect": "not_found"}
+{"id": "u02", "question": "What is the minimum entry age for the term life policy?", "expect": "not_found"}
+{"id": "u03", "question": "What is the company's claim settlement ratio?", "expect": "not_found"}
+{"id": "u04", "question": "Can I pay my premium with cryptocurrency?", "expect": "not_found"}
+{"id": "u05", "question": "Does the ULIP guarantee a minimum return?", "expect": "not_found"}
+{"id": "u06", "question": "How do I reset my online account password?", "expect": "not_found"}
+{"id": "u07", "question": "What premium would a 30-year-old non-smoker pay for term cover?", "expect": "not_found"}
+{"id": "u08", "question": "Does the health policy cover treatment abroad?", "expect": "not_found"}

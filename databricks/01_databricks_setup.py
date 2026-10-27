@@ -9,12 +9,10 @@
 
 # COMMAND ----------
 
-import sys
 import os
-sys.path.append('/Workspace/ai-policy-copilot')
 
-from config.databricks_config import databricks_config
-from data.synthetic_data_generator import InsuranceDataGenerator
+# Run this notebook from a Databricks Git folder so the files next to it are importable.
+from synthetic_data_generator import InsuranceDataGenerator
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
@@ -512,10 +510,7 @@ Created:
 - Model Registry: surrender_propensity_model
 
 Next steps:
-1. Run 02_train_surrender_model notebook to train the ML model
-2. Run 03_create_policy_documents notebook to generate policy PDFs
-3. Run 04_setup_rag_pipeline notebook to index documents
-4. Start the FastAPI server for the chatbot
+1. Run 02_train_surrender_model to train and register the model
 """)
 
 # COMMAND ----------

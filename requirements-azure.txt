@@ -1,0 +1,2 @@
+# Azure OpenAI as the answer generator (LLM_PROVIDER=azure_openai)
+openai>=1.40
