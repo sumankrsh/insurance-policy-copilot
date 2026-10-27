@@ -139,7 +139,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "latency_ms": round((time.perf_counter() - start) * 1000),
             },
         )
-        flags = check.flags + output_flags + ([f"fallback: {answer.fallback_reason}"] if answer.fallback_reason else [])
+        # Clients see the category ("llm_error"); the full reason stays in the audit log.
+        fallback = [f"fallback: {answer.fallback_reason.split(':')[0]}"] if answer.fallback_reason else []
+        flags = check.flags + output_flags + fallback
         return {"answer": text, "found": answer.found, "citations": citations, "provider": answer.provider}, flags
 
     def score_customer(customer_id: str, trace_id: str) -> dict[str, Any]:

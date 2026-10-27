@@ -238,7 +238,7 @@ ml/             feature definitions, decision thresholds, training script
 data/           synthetic data generator, the four policy PDFs and their generator
 eval/           Q&A eval questions and runner
 reports/        generated eval reports (committed)
-tests/          pytest suite (93 tests)
+tests/          pytest suite (94 tests)
 ui/             Streamlit front end
 databricks/     optional Databricks notebooks (see its README)
 ```

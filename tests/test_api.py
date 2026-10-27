@@ -1,9 +1,14 @@
 import sqlite3
 from dataclasses import replace
+from types import SimpleNamespace
 
+import anthropic
+import httpx2
 import pytest
 from fastapi.testclient import TestClient
 
+from app import api
+from app.answer import AnthropicAnswerer
 from app.api import create_app, route_message
 
 
@@ -151,3 +156,20 @@ def test_audit_chain_detects_tampering(client, settings):
         conn.execute("UPDATE audit_log SET payload = replace(payload, '30 days', '60 days') WHERE id = 1")
     result = client.get("/audit/verify").json()
     assert result["ok"] is False and result["first_bad_id"] == 1
+
+
+def test_llm_failure_is_reported_briefly_to_clients(settings, monkeypatch):
+    def fail(**_):
+        raise anthropic.APIConnectionError(request=httpx2.Request("POST", "https://api.anthropic.com/v1/messages"))
+
+    stub = SimpleNamespace(beta=SimpleNamespace(messages=SimpleNamespace(create=fail)))
+    monkeypatch.setattr(api, "build_answerer", lambda s, r: AnthropicAnswerer("claude-opus-5-5", client=stub))
+    client = TestClient(api.create_app(settings))
+    assert client.get("/health").json()["answer_provider"] == "anthropic/claude-opus-5-5"
+
+    body = client.post("/ask", json={"question": "How long is the free-look period?"}).json()
+    assert body["provider"] == "extractive" and "15 days" in body["answer"]
+    assert "fallback: llm_error" in body["guardrails"]
+    assert not any("Connection" in flag for flag in body["guardrails"])
+    record = client.get("/audit", params={"trace_id": body["trace_id"]}).json()[0]
+    assert record["payload"]["fallback_reason"].startswith("llm_error: APIConnectionError")
