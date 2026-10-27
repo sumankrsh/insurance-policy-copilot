@@ -11,7 +11,7 @@ COPY ml ./ml
 COPY data ./data
 
 # Train the propensity model on synthetic data at build time (about 15 seconds)
-RUN python -m ml.train_propensity --no-report
+RUN python -m ml.train_propensity
 
 RUN useradd --create-home appuser && mkdir -p var && chown appuser var
 USER appuser

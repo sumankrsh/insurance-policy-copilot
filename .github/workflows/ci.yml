@@ -28,7 +28,7 @@ jobs:
       - name: Unit tests
         run: pytest
       - name: Train the propensity model and check test AUC
-        run: python -m ml.train_propensity --check --no-report
+        run: python -m ml.train_propensity --check
       - name: Policy Q&A eval (offline answerer)
         run: python -m eval.rag_eval --check --no-write
 
