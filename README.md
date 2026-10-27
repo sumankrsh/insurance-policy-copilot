@@ -1,333 +1,283 @@
-# 🛡️ Insurance Policy & Retention Copilot
+# Insurance Policy Copilot
 
-An enterprise-grade AI copilot for insurance operations that combines RAG over policy documents with ML-driven surrender propensity modeling. Built with Azure Databricks, MLflow, and production-ready guardrails.
+A small, working example of two things an insurer's service team might want from GenAI and ML,
+built with the controls I'd expect before either goes near a customer:
 
-![Architecture](docs/architecture.png)
+1. **Policy Q&A.** Ask a question about the policy documents and get a short answer that cites
+   the document, page and section it came from. With an Anthropic API key it uses Claude;
+   without one it falls back to an offline answerer, so the project runs anywhere.
+2. **Surrender (retention) risk.** A model scores a customer's active policies for the chance
+   of surrender in the next 90 days, explains the top factors, and holds high-risk
+   recommendations for a person to approve before anyone calls the customer.
 
-## 🎯 Key Features
+Around both: PII redaction, prompt-injection checks, a tamper-evident audit log, a human
+review queue, and evals that run in CI.
 
-### Business Capabilities
-- **Policy Q&A with Citations**: RAG-based answers from policy documents with source citations
-- **Surrender Propensity Scoring**: Real-time ML predictions with XGBoost model (78% AUC)
-- **Next-Best Actions**: Automated decisioning with business rules
-- **PII Protection**: Enterprise-grade redaction using Presidio
-- **Audit Compliance**: Full conversation logging and traceability
+All data is synthetic: four made-up policy PDFs and generated customers. No real customer
+data, and none of the numbers below describe real-world performance.
 
-### Technical Features
-- **Azure Databricks Integration**: Delta tables, Feature Store, MLflow
-- **Production ML Pipeline**: Automated training, versioning, and deployment
-- **Scalable RAG**: FAISS vector store with reranking
-- **Tool Calling**: Structured API for business operations
-- **Comprehensive Guardrails**: PII redaction, output validation, rate limiting
+## Architecture
 
-## 📊 Performance Metrics
-
-| Metric | Value |
-|--------|-------|
-| RAG Accuracy | 78% |
-| Hallucination Rate | <2.5% |
-| Model AUC-ROC | 0.82 |
-| P95 Latency | <2s |
-| Containment Rate | 65% |
-
-## 🏗️ Architecture
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Streamlit UI  │────▶│  FastAPI Backend│────▶│   Databricks    │
-│   (Chat Interface)     │   (Business Logic)     │  (Data & ML)    │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                               │                          │
-                               ▼                          ▼
-                        ┌─────────────┐           ┌─────────────┐
-                        │ RAG Pipeline│           │   MLflow    │
-                        │   (FAISS)   │           │  (Models)   │
-                        └─────────────┘           └─────────────┘
+```mermaid
+flowchart LR
+    UI["Streamlit UI (optional)"] -->|HTTP| API["FastAPI app"]
+    API --> IN["Input guardrails<br/>PII redaction, injection check"]
+    IN --> RET["Retriever<br/>TF-IDF on words + character n-grams"]
+    PDF[("4 policy PDFs<br/>19 sections")] --> RET
+    RET -->|"top 4 sections"| ANS{"Answerer"}
+    ANS -->|"ANTHROPIC_API_KEY set"| CL["Claude<br/>search results with citations"]
+    ANS -->|"Azure settings set"| AZ["Azure OpenAI"]
+    ANS -->|"no key, or LLM fails"| EX["Extractive<br/>best-matching lines"]
+    CL --> OUT["Output guardrails"]
+    AZ --> OUT
+    EX --> OUT
+    API --> PS["Propensity service<br/>gradient-boosted trees"]
+    TR["ml/train_propensity.py"] -->|"model + feature table"| PS
+    PS -->|"p >= 0.5"| RQ[("Review queue")]
+    OUT --> AL[("Audit log<br/>SHA-256 hash chain")]
+    PS --> AL
+    RQ --> AL
 ```
 
-## 🚀 Quick Start
+## Quick start
 
-### Prerequisites
-- Python 3.10+
-- Azure Databricks Account (Free tier works)
-- Docker & Docker Compose
-- 8GB RAM minimum
-
-### 1. Clone and Setup Environment
+Needs Python 3.11 or 3.12.
 
 ```bash
-# Clone repository
-git clone https://github.com/your-org/ai-policy-copilot.git
-cd ai-policy-copilot
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+git clone https://github.com/sumankrsh/insurance-policy-copilot.git
+cd insurance-policy-copilot
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-
-# Copy and configure environment variables
-cp .env.template .env
-# Edit .env with your Azure/Databricks credentials
+python -m ml.train_propensity     # about 15 s: synthetic data, model, eval report
+uvicorn app.main:app --port 8000
 ```
 
-### 2. Setup Databricks
+Then open http://localhost:8000/docs, or try:
 
 ```bash
-# Run the Databricks setup notebook
-databricks workspace import notebooks/01_databricks_setup.py /Shared/insurance-copilot/setup --language PYTHON
-
-# Execute in Databricks UI or via CLI
-databricks jobs create --json-file config/databricks_job.json
-databricks runs submit --job-id <job-id>
+curl -s localhost:8000/ask -H 'content-type: application/json' \
+  -d '{"question": "How long is the free-look period?"}'
+curl -s -X POST localhost:8000/customers/C010020/propensity
 ```
 
-### 3. Generate Data and Train Model
+To use Claude for answers, set `ANTHROPIC_API_KEY` before starting the API (or copy
+`.env.example` to `.env`). For Azure OpenAI, `pip install -r requirements-azure.txt` and set the
+`AZURE_OPENAI_*` variables. `GET /health` shows which answerer is active.
+
+Optional web UI, in a second terminal:
 
 ```bash
-# Generate synthetic data and policy documents
-python -m data.synthetic_data_generator
-python -m data.policy_document_generator
-
-# Process documents for RAG
-python -m app.rag_pipeline
-
-# Train surrender propensity model (or run in Databricks)
-python notebooks/02_train_surrender_model.py
+pip install -r requirements-ui.txt
+streamlit run ui/streamlit_app.py   # http://localhost:8501
 ```
 
-### 4. Run the Application
-
-#### Option A: Local Development
-```bash
-# Terminal 1: Start FastAPI backend
-uvicorn app.main:app --reload --port 8000
-
-# Terminal 2: Start Streamlit frontend
-streamlit run ui/streamlit_app.py --server.port 8501
-```
-
-#### Option B: Docker Compose (Recommended)
-```bash
-docker-compose up --build
-```
-
-Access the application:
-- **Chat UI**: http://localhost:8501
-- **API Docs**: http://localhost:8000/docs
-- **Metrics**: http://localhost:8000/metrics
-- **Grafana**: http://localhost:3000 (admin/admin)
-
-## 📁 Project Structure
-
-```
-ai-policy-copilot/
-├── app/                    # FastAPI backend
-│   ├── main.py            # API endpoints
-│   ├── rag_pipeline.py    # RAG implementation
-│   ├── guardrails.py      # PII & output validation
-│   └── tools.py           # Business logic tools
-├── ui/                     # Streamlit frontend
-│   └── streamlit_app.py   # Chat interface
-├── ml/                     # ML models
-│   ├── train.py           # Training pipeline
-│   └── inference.py       # Model serving
-├── data/                   # Data generation
-│   ├── synthetic_data_generator.py
-│   └── policy_document_generator.py
-├── notebooks/              # Databricks notebooks
-│   ├── 01_databricks_setup.py
-│   └── 02_train_surrender_model.py
-├── config/                 # Configuration
-│   └── databricks_config.py
-├── tests/                  # Test suite
-├── docker-compose.yml      # Container orchestration
-└── requirements.txt        # Dependencies
-```
-
-## 🔧 Configuration
-
-### Databricks Setup
-
-1. Create catalog and schemas:
-```sql
-CREATE CATALOG IF NOT EXISTS insurance_copilot;
-CREATE SCHEMA IF NOT EXISTS insurance_copilot.policy_data;
-CREATE SCHEMA IF NOT EXISTS insurance_copilot.ml_models;
-CREATE SCHEMA IF NOT EXISTS insurance_copilot.features;
-```
-
-2. Configure MLflow:
-```python
-mlflow.set_tracking_uri("databricks")
-mlflow.set_experiment("/Shared/insurance-copilot-experiments")
-```
-
-### Environment Variables
-
-Key configurations in `.env`:
-```bash
-DATABRICKS_HOST=https://adb-xxxxx.azuredatabricks.net
-DATABRICKS_TOKEN=dapi-xxxxx
-AZURE_OPENAI_KEY=xxxxx
-```
-
-## 🧪 Testing
+Or with Docker (the image trains the model at build time):
 
 ```bash
-# Unit tests
-pytest tests/ -v
-
-# Integration tests
-pytest tests/integration/ -v
-
-# Load testing
-locust -f tests/load_test.py --host=http://localhost:8000
+docker build -t policy-copilot . && docker run -p 8000:8000 policy-copilot
 ```
 
-## 📈 MLOps Pipeline
+Tests: `pip install -r requirements-dev.txt && pytest`.
 
-### Model Training
-```python
-# Automated retraining with MLflow
-mlflow.start_run():
-    model = train_model(data)
-    mlflow.sklearn.log_model(model, "model")
-    mlflow.register_model(model_uri, "surrender_propensity_model")
-```
+## Example
 
-### Model Deployment
-```python
-# Promote to production
-client.transition_model_version_stage(
-    name="surrender_propensity_model",
-    version=latest_version,
-    stage="Production"
-)
-```
+`POST /ask` with `{"question": "How long is the free-look period? I'm on 9876543210."}`, offline mode:
 
-## 🔒 Security & Compliance
-
-### PII Protection
-- Automatic PII detection and redaction using Presidio
-- Hashed logging for audit trails
-- GDPR-compliant data handling
-
-### Access Control
-- JWT-based authentication
-- Role-based access control (RBAC)
-- API key management
-
-### Audit Logging
 ```json
 {
-  "trace_id": "uuid",
-  "timestamp": "2024-01-01T12:00:00Z",
-  "user_input_redacted": "Check policy for [CUSTOMER_ID:hash]",
-  "model_decision": "high_risk",
-  "latency_ms": 450
+  "answer": "From the policy documents:\n- Free-Look Period: The policyholder has 15 days from policy receipt to review and return if not satisfied. [1]",
+  "found": true,
+  "citations": [
+    {
+      "n": 1,
+      "document": "Term Life Insurance Policy",
+      "source_file": "term_life_insurance_policy.pdf",
+      "page": 3,
+      "section": "Section 6: Terms and conditions",
+      "quote": "Free-Look Period: The policyholder has 15 days from policy receipt to review and return if not satisfied."
+    }
+  ],
+  "provider": "extractive",
+  "guardrails": ["pii_redacted"]
 }
 ```
 
-## 📊 Monitoring
+The phone number was replaced with `[PHONE]` before retrieval, before any LLM call and before the
+audit log; the `guardrails` field records that it happened.
 
-### Metrics Exposed
-- Request latency (P50, P95, P99)
-- Model drift detection
-- Token usage and costs
-- Error rates by type
+`POST /customers/C010020/propensity` (first policy only):
 
-### Dashboards
-Access Grafana at http://localhost:3000:
-- Chat Performance Dashboard
-- Model Performance Dashboard
-- System Health Dashboard
-
-## 🚢 Deployment
-
-### Azure Kubernetes Service (AKS)
-```bash
-# Build and push to ACR
-az acr build --registry insurancecopilot --image copilot:v1.0 .
-
-# Deploy to AKS
-kubectl apply -f k8s/deployment.yaml
+```json
+{
+  "customer_id": "C010020",
+  "model_version": "gradient_boosting-seed42-n20000",
+  "policies": [
+    {
+      "policy_id": "P00024608",
+      "policy_type": "Health",
+      "probability": 0.652,
+      "risk_tier": "high",
+      "top_factors": [
+        {"feature": "surrender_queries_12m", "description": "surrender-related contacts in the last year", "value": 1.0, "typical_value": 0.0, "effect": 0.254},
+        {"feature": "payment_gaps", "description": "missed premium payments on this policy", "value": 2.0, "typical_value": 0.0, "effect": 0.176},
+        {"feature": "tenure_months", "description": "months since the policy started", "value": 36.0, "typical_value": 33.0, "effect": 0.077}
+      ]
+    }
+  ],
+  "decision": {
+    "policy_id": "P00024608",
+    "probability": 0.652,
+    "risk_tier": "high",
+    "recommended_action": "retention_call",
+    "needs_human_review": true,
+    "status": "pending_human_review",
+    "review_id": "714654292e14"
+  }
+}
 ```
 
-### Azure Container Instances
-```bash
-az container create \
-  --resource-group insurance-copilot-rg \
-  --name insurance-copilot \
-  --image insurancecopilot.azurecr.io/copilot:v1.0 \
-  --ports 8000 8501
+The recommendation waits in `GET /reviews?status=pending` until someone calls
+`POST /reviews/{review_id}` with `{"approve": true, "reviewer": "...", "note": "..."}`.
+
+## Results on synthetic data
+
+Both reports are generated by scripts in this repo and committed in [`reports/`](reports/).
+
+**Surrender model** ([`reports/propensity_eval.md`](reports/propensity_eval.md)). 20,000
+synthetic customers, 34,298 active policies, split by customer into train / validation / test.
+
+| Scores on the test split (6,772 policies) | ROC AUC | PR AUC | Brier |
+|---|---|---|---|
+| Logistic regression (baseline) | 0.704 | 0.435 | 0.175 |
+| Gradient-boosted trees (served) | 0.732 | 0.472 | 0.168 |
+| Ceiling: the generator's own probabilities | 0.746 | 0.494 | 0.164 |
+
+The labels come from a hand-written rule plus noise (`data/synthetic_data.py`), so the honest
+reading is "the model recovers most of the rule": it gets within about 0.015 AUC of the ceiling. On
+the test split, the 5.1% of policies scored high risk surrendered at 62.9%, against a 26.0% base
+rate; the 44% scored low risk surrendered at 11.4%.
+
+**Policy Q&A** ([`reports/rag_eval.md`](reports/rag_eval.md)). 40 questions I wrote against the
+four documents: 32 they answer, 8 they don't.
+
+| Offline (extractive) answerer | Result |
+|---|---|
+| Right document retrieved first | 32 / 32 |
+| Answer contains the expected fact | 30 / 32 |
+| Answer cites the expected document | 32 / 32 |
+| Unanswerable question correctly answered "not found" | 4 / 8 |
+| Median time per question | about 5 ms |
+
+The weak spot is the last row: without an LLM, the system often quotes the nearest line instead
+of saying it doesn't know. The Claude prompt asks for `NOT_FOUND` in that case, but I haven't
+measured how well that works yet: the API key available when I built this had no credit, so the
+Claude path is covered by tests against a stubbed client, not by a live eval run.
+`python -m eval.rag_eval --provider anthropic` runs it (40 calls).
+
+## Design notes
+
+**Grounded answers.** Retrieved sections go to Claude as `search_result` blocks with citations
+enabled, so each cited span is a verbatim quote from a section the system retrieved. The
+prompt treats excerpts as reference text, not instructions, and asks for `NOT_FOUND` when they
+don't answer the question. If nothing relevant is retrieved, no LLM call is made. If the LLM
+call fails, Claude declines, or an answer comes back with no valid citation, the API returns the
+extractive answer instead and records why. The request opts into Anthropic's server-side
+fallback model for safety-classifier declines. Sampling parameters such as `temperature` are not
+sent; current Claude models reject them.
+
+**Retrieval.** One chunk per section per page (19 in total), indexed with TF-IDF on words and on
+character n-grams. It needs no model download, runs offline in milliseconds, and is
+deterministic, which keeps the tests and CI simple. It matches words, not meaning, so
+paraphrased questions can miss; an embedding model would be the next step for a larger corpus.
+
+**Guardrails** (`app/guardrails.py`). Input: regex-based PII redaction (email, phone, card numbers
+with a Luhn check, Aadhaar, PAN, SSN, and policy/customer/claim IDs), a prompt-injection check that
+refuses obvious attempts, a length cap, and detection of requests for personal advice, which adds
+a disclaimer to the answer. Output: HTML stripped, PII redacted again, length capped.
+
+**Human review.** Thresholds live in `ml/decision.py`: high risk is a probability of at least
+0.5 (more likely than not to surrender), medium is at least 0.25 (above the average surrender
+rate). A high-risk score creates one pending review per policy; scoring again doesn't create a
+duplicate. Approving or rejecting records who decided and why.
+
+**Audit log** (`app/audit.py`). Every request writes a record: redacted input, retrieved section
+IDs and scores, answerer, fallback reason, answer, citations, token usage, latency, and for
+scoring the model version, scores and decision. Raw user input is never stored. Each record holds
+the SHA-256 of the previous one, so `GET /audit/verify` detects an edited or deleted row. Someone
+with write access could still rebuild the whole chain; anchoring the latest hash somewhere
+external would close that gap.
+
+**Model.** A scikit-learn `HistGradientBoostingClassifier`, chosen over logistic regression on the
+validation split and reported on a test split it never saw. Customers don't span splits. Training
+and serving read features through the same module (`ml/features.py`). The "top factors" are
+per-policy: how much the score drops when that one feature is set to its training median. That is
+simple and model-agnostic, but it ignores interactions between features; SHAP would be more
+thorough.
+
+## API
+
+| Method and path | What it does |
+|---|---|
+| `GET /health` | Status, active answerer, model version |
+| `POST /ask` | Answer a question from the documents, with citations |
+| `POST /chat` | Single entry point used by the UI; routes by simple rules to Q&A, scoring or policy lookups |
+| `POST /customers/{customer_id}/propensity` | Score a customer's active policies |
+| `GET /policies/{policy_id}` | Policy summary from the synthetic records |
+| `GET /policies/{policy_id}/surrender-value` | Indicative surrender value (fund value minus surrender charge) |
+| `GET /reviews?status=pending` | Recommendations waiting for review |
+| `POST /reviews/{review_id}` | Approve or reject one |
+| `GET /audit?trace_id=...` | Audit records |
+| `GET /audit/verify` | Check the hash chain |
+
+## Project layout
+
+```
+app/            FastAPI app: documents, retrieval, answerers, guardrails, propensity, audit
+ml/             feature definitions, decision thresholds, training script
+data/           synthetic data generator, the four policy PDFs and their generator
+eval/           Q&A eval questions and runner
+reports/        generated eval reports (committed)
+tests/          pytest suite (93 tests)
+ui/             Streamlit front end
+databricks/     optional Databricks notebooks (see its README)
 ```
 
-## 📝 API Documentation
+## Tests and CI
 
-### Chat Endpoint
-```bash
-curl -X POST http://localhost:8000/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [{"role": "user", "content": "What is surrender charge?"}],
-    "customer_id": "C000001"
-  }'
-```
+GitHub Actions runs on Python 3.11 and 3.12: ruff, the pytest suite, model training with a floor
+on test AUC (0.70), and the offline Q&A eval with floors on its scores. A second job builds the
+Docker image and smoke-tests `/health`, `/ask` and scoring against the running container. The
+Claude and Azure answerers are tested with stub clients, so CI needs no API keys.
 
-### Tool Endpoints
-```bash
-# Surrender Propensity
-curl http://localhost:8000/tools/get_surrender_propensity?customer_id=C000001
+## Limitations
 
-# Policy Summary
-curl http://localhost:8000/tools/get_policy_summary?policy_id=P00000001
-```
+- Synthetic data throughout. The surrender labels follow a rule I wrote, and the four policy
+  documents are short and simple. Real documents (scanned PDFs, long tables, amendments) would
+  need better parsing and chunking.
+- Lexical retrieval and the offline answerer can't compare across rows, combine facts, or
+  reliably recognise questions the documents don't answer.
+- The Claude and Azure OpenAI paths are tested against stubbed clients only (see above).
+- PII detection is pattern-based. It does not catch names or street addresses; an NER model such
+  as Presidio would be needed for that.
+- No authentication. The audit, review and scoring endpoints are open, and SQLite suits one
+  instance, not a cluster.
+- The chat route uses keyword rules and keeps no conversation history.
+- The surrender value is indicative, computed from the synthetic policy record, not from each
+  policy document's formula.
+- The eval questions were written by me while building this, and the offline thresholds were set
+  by looking at the same questions.
 
-## 🎯 Business Impact
+## Optional: Databricks and MLflow
 
-### Achieved Results
-- **12% reduction** in policy surrenders
-- **78% containment rate** for customer queries
-- **$1.2M saved** in retention costs (projected annual)
-- **65% reduction** in average handling time
+`python -m ml.train_propensity --mlflow` logs the run, metrics and model to MLflow
+(`pip install -r requirements-databricks.txt`; tested against a local MLflow store). The
+[`databricks/`](databricks/) folder holds the original Databricks notebooks (Delta tables, feature
+tables, XGBoost, model registry). They are not run in CI; their README says what was changed.
 
-### Use Cases Delivered
-1. **Policy Q&A**: Instant answers with citations
-2. **Surrender Prevention**: Proactive retention interventions  
-3. **Claims Triage**: Automated initial assessment
-4. **Compliance Checking**: Policy validation and audit
+## License
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
-
-## 🏆 Acknowledgments
-
-- Azure Databricks for scalable data platform
-- Anthropic Claude for LLM capabilities
-- Microsoft Presidio for PII protection
-- MLflow for experiment tracking
-
-## 📞 Support
-
-- **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/your-org/ai-policy-copilot/issues)
-- **Email**: insurance-copilot@yourcompany.com
+MIT, see [LICENSE](LICENSE).
 
 ---
 
-**Built with ❤️ for the Insurance Industry**
-
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
+Built by Suman Mukherjee · contactme@mukherjeesuman.com · [mukherjeesuman.com](https://mukherjeesuman.com)
