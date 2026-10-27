@@ -14,6 +14,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.calibration import CalibratedClassifierCV
+from sklearn.frozen import FrozenEstimator
 from sklearn.metrics import (
     roc_auc_score, precision_recall_curve, auc, 
     classification_report, confusion_matrix,
@@ -219,18 +220,19 @@ with mlflow.start_run(run_name="xgboost_surrender_model"):
     mlflow.log_params(params)
     
     # Train model
-    model = xgb.XGBClassifier(**params, use_label_encoder=False, eval_metric='logloss')
+    # XGBoost 2.x takes early stopping and the eval metric in the constructor
+    model = xgb.XGBClassifier(**params, eval_metric='logloss', early_stopping_rounds=20)
     
     eval_set = [(X_val, y_val)]
     model.fit(
         X_train_balanced, y_train_balanced,
         eval_set=eval_set,
-        early_stopping_rounds=20,
         verbose=False
     )
     
     # Calibrate model for better probability estimates
-    calibrated_model = CalibratedClassifierCV(model, method='isotonic', cv='prefit')
+    # scikit-learn >= 1.6: wrap the fitted model instead of cv='prefit'
+    calibrated_model = CalibratedClassifierCV(FrozenEstimator(model), method='isotonic')
     calibrated_model.fit(X_val, y_val)
     
     # Predictions
