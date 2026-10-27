@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Lint
+        run: ruff check . && ruff format --check .
+      - name: Unit tests
+        run: pytest
+      - name: Train the propensity model and check test AUC
+        run: python -m ml.train_propensity --check --no-report
+      - name: Policy Q&A eval (offline answerer)
+        run: python -m eval.rag_eval --check --no-write
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build
+        run: docker build -t policy-copilot .
+      - name: Smoke test
+        run: |
+          docker run -d -p 8000:8000 --name copilot policy-copilot
+          for i in $(seq 1 30); do curl -fsS localhost:8000/health && break; sleep 2; done
+          curl -fsS -X POST localhost:8000/ask -H 'content-type: application/json' \
+            -d '{"question": "How long is the free-look period?"}' | tee answer.json
+          grep -q "15 days" answer.json
+          curl -fsS -X POST localhost:8000/customers/C000001/propensity | tee score.json
+          grep -q model_version score.json
+      - name: Container logs
+        if: always()
+        run: docker logs copilot || true
